@@ -101,9 +101,7 @@ ENABLE_WIRELESS=${ENABLE_WIRELESS:=false}
 ENABLE_SOUND=${ENABLE_SOUND:=false}
 
 # Kernel installation settings
-COMPILE_KERNEL=${COMPILE_KERNEL:=false}
-KERNEL_CONFIG=${KERNEL_CONFIG:="netfilter.config"}
-KERNELSRC_DIR=${KERNELSRC_DIR:=""}
+KERNELSRC_DIR=${KERNELSRC_DIR:="linux-4.9.30"}
 UBOOTSRC_DIR=${UBOOTSRC_DIR:=""}
 
 set +x
@@ -216,16 +214,11 @@ if [ "$ENABLE_SOUND" = true ] ; then
   APT_INCLUDES="${APT_INCLUDES},alsa-utils"
 fi
 
-. ./build-kernel.sh
-
 # Execute bootstrap scripts
 for SCRIPT in bootstrap.d/*.sh; do
   head -n 3 "$SCRIPT"
   . "$SCRIPT"
 done
-
-# Remove apt-utils
-#chroot_exec apt-get purge -qq -y --force-yes apt-utils
 
 # Generate required machine-id
 MACHINE_ID=$(dbus-uuidgen)
