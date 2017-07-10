@@ -1,6 +1,9 @@
+#!/bin/bash
+
 logger -t "rc.firstboot" "Starting first boot actions"
 
 logger -t "rc.firstboot" "Generating SSH host keys"
+  
   # Remove ssh host keys
   rm -f /etc/ssh/ssh_host_*
   systemctl stop sshd

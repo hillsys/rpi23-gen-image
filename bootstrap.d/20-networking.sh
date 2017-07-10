@@ -36,15 +36,18 @@ fi
 printf "${INTERFACES_FILE}" > files/interfaces
 install_readonly files/interfaces "${ETC_DIR}/network/interfaces"
 
-# Enable systemd-networkd and nftables service
+# Enable systemd-networkd service
 chroot_exec systemctl enable systemd-networkd
+
+# Remove iptables and enable nftables
+chroot_exec apt remove iptables
 chroot_exec systemctl enable nftables
 
 # Install host.conf resolver configuration
 printf "# spoof warn\nmulti on" > files/host.conf
 install_readonly files/host.conf "${ETC_DIR}/host.conf"
 
-# Download the firmware binary blob required to use the RPi3 wireless interface
+# Install wireless binaries required to use the RPi3 wireless interface
 if [ "$ENABLE_WIRELESS" = true ] ; then
   if [ ! -d ${WLAN_FIRMWARE_DIR} ] ; then
     mkdir -p ${WLAN_FIRMWARE_DIR}
