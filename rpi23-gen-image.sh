@@ -1,9 +1,12 @@
 #!/bin/sh
 
+echo -e "\n\n### Getting Firmware \n"
+set -v
 # URLs
 BOOT_FIRMWARE_URL=https://github.com/raspberrypi/firmware/raw/master/boot
 WIRELESS_FIRMWARE_URL=https://github.com/RPi-Distro/firmware-nonfree/raw/master/brcm80211/brcm
 
+set -x
 # Get firmware
 if [ ! -d "firmware" ] ; then
     mkdir -p firmware/boot
@@ -22,6 +25,8 @@ if [ ! -d "firmware" ] ; then
     wget -q -O "firmware/boot/start.elf" "${BOOT_FIRMWARE_URL}/start.elf"
     wget -q -O "firmware/boot/start_x.elf" "${BOOT_FIRMWARE_URL}/start_x.elf"
 fi
+
+echo -e "\n### Settings \n"
 
 # Build directories
 BASEDIR="$(pwd)/images"
@@ -66,10 +71,6 @@ else
   exit 1
 fi
 
-# Introduce settings
-echo -n -e "\n#\n# RPi2/3 Bootstrap Settings\n#\n"
-set -x
-
 # General settings
 HOSTNAME=${HOSTNAME:=rpi${RPI_MODEL}-${DEBIAN_RELEASE}}
 USER_NAME=${USER_NAME:=""}
@@ -106,7 +107,7 @@ KERNEL_CONFIG=${KERNEL_CONFIG:="netfilter.config"}
 KERNELSRC_DIR=${KERNELSRC_DIR:=""}
 UBOOTSRC_DIR=${UBOOTSRC_DIR:=""}
 
-set +x
+set +v
 
 # Packages required in the chroot build environment.  If there is an error in your packages it will not build.
 APT_INCLUDES=${APT_INCLUDES:=""}
@@ -130,9 +131,6 @@ APT_INCLUDES="${APT_INCLUDES},xxd,xz-utils"
 # nftables includes
 APT_INCLUDES="${APT_INCLUDES},autoconf,libmnl-dev,libnftnl-dev,libgmp-dev,libreadline-dev,nftables"
 
-# Chroot scripts directory
-CHROOT_SCRIPTS=${CHROOT_SCRIPTS:=""}
-
 # Packages required for bootstrapping  (host PC)
 REQUIRED_PACKAGES="debootstrap debian-archive-keyring qemu-user-static binfmt-support dosfstools rsync bmap-tools whois git"
 MISSING_PACKAGES=""
@@ -150,16 +148,9 @@ validation_check(){
   # Check if the internal wireless interface is supported by the RPi model
   elif [ "$ENABLE_WIRELESS" = true ] && [ "$RPI_MODEL" != 3 ] ; then
     echo "Error: The selected Raspberry Pi model has no internal wireless interface!"
-  # Is kernel ready?
-  elif [ ! -e "${KERNELSRC_DIR}/arch/${KERNEL_ARCH}/boot/${KERNEL_IMAGE_SOURCE}" ] ; then
-    echo "Error: Linux kernel must be precompiled."
   # Is u-boot ready?
   elif [ ! -e "${UBOOTSRC_DIR}/u-boot.bin" ] ; then
     echo "Error: U-Boot bootloader must be precompiled."
-  # Is firmware ready?
-  #elif [ ! -d "$RPI_FIRMWARE_DIR/boot" ] ; then
-  #  echo "Error: Raspberry Pi firmware directory not specified or not found!"
-  # Check if ./bootstrap.d directory exists
   elif [ ! -d "./bootstrap.d/" ] ; then
     echo "Error: './bootstrap.d' required directory not found!"
   # Check if ./files directory exists
@@ -214,7 +205,7 @@ if [ -n "$MISSING_PACKAGES" ] ; then
   fi
 fi
 
-set -x
+set -v
 
 # Call "cleanup" function on various signals and errors
 trap cleanup 0 1 2 3 6

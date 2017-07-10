@@ -16,3 +16,8 @@ if [ ${COMPILE_KERNEL} = true ]
         exit 1
     fi
 fi
+
+if [ ! -e "${KERNELSRC_DIR}/arch/${KERNEL_ARCH}/boot/${KERNEL_IMAGE_SOURCE}" ] ; then
+    echo "Error: Linux kernel must be precompiled."
+    exit 1
+fi
