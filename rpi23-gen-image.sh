@@ -101,6 +101,7 @@ ENABLE_WIRELESS=${ENABLE_WIRELESS:=false}
 ENABLE_SOUND=${ENABLE_SOUND:=false}
 
 # Kernel installation settings
+COMPILE_KERNEL=${COMPILE_KERNEL:=false}
 KERNEL_CONFIG=${KERNEL_CONFIG:="netfilter.config"}
 KERNELSRC_DIR=${KERNELSRC_DIR:=""}
 UBOOTSRC_DIR=${UBOOTSRC_DIR:=""}
@@ -222,6 +223,8 @@ trap cleanup 0 1 2 3 6
 if [ "$ENABLE_SOUND" = true ] ; then
   APT_INCLUDES="${APT_INCLUDES},alsa-utils"
 fi
+
+. ./build-kernel.sh
 
 # Execute bootstrap scripts
 for SCRIPT in bootstrap.d/*.sh; do
