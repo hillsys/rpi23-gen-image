@@ -1,0 +1,42 @@
+logger -t "rc.firstboot" "Starting first boot actions"
+
+logger -t "rc.firstboot" "Generating SSH host keys"
+  # Remove ssh host keys
+  rm -f /etc/ssh/ssh_host_*
+  systemctl stop sshd
+
+  # Regenerate ssh host keys
+  ssh-keygen -q -t rsa -N "" -f /etc/ssh/ssh_host_rsa_key
+  ssh-keygen -q -t dsa -N "" -f /etc/ssh/ssh_host_dsa_key
+  ssh-keygen -q -t ecdsa -N "" -f /etc/ssh/ssh_host_ecdsa_key
+  ssh-keygen -q -t ed25519 -N "" -f /etc/ssh/ssh_host_ed25519_key
+  systemctl start sshd
+
+logger -t "rc.firstboot" "Generating D-Bus machine-id"
+    rm -f /var/lib/dbus/machine-id 
+    dbus-uuidgen --ensure
+
+logger -t "rc.firstboot" "Creating /etc/resolv.conf symlink"
+    # Check if systemd resolve directory exists
+    if [ ! -d "/run/systemd/resolve" ] ; then
+    systemctl enable systemd-resolved.service
+    systemctl restart systemd-resolved.service
+    fi
+
+    # Create resolv.conf file if it does not exists
+    if [ ! -f "/run/systemd/resolve/resolv.conf" ] ; then
+    touch /run/systemd/resolve/resolv.conf
+    fi
+
+    # Create symlink to /etc/resolv.conf
+    ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
+
+logger -t "rc.firstboot" "Reload systemd manager configuration"
+    systemctl daemon-reload
+    systemctl restart networking.service
+    systemctl restart systemd-networkd.service
+
+# Remove rc.firstboot file and edit rc.local removing the call to rc.firstboot
+logger -t "rc.firstboot" "First boot actions finished"
+    rm -f /etc/rc.firstboot
+    sed -i '/.*rc.firstboot/d' /etc/rc.local
