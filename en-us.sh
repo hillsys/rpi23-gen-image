@@ -14,7 +14,6 @@ ENABLE_SOUND=false \
 ENABLE_WIRELESS=false \
 COMPILE_KERNEL=true \
 KERNEL_CONFIG="netfilter.config"
-KERNELSRC_DIR="/mnt/PI2-Build/linux-4.9.30" \
 UBOOTSRC_DIR="/mnt/PI2-Build/u-boot" \
 NET_ADDRESS="" \
 NET_MASK="" \

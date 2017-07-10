@@ -1,12 +1,11 @@
 #!/bin/sh
 
 echo -e "\n\n### Getting Firmware \n"
-set -v
+set -x
 # URLs
 BOOT_FIRMWARE_URL=https://github.com/raspberrypi/firmware/raw/master/boot
 WIRELESS_FIRMWARE_URL=https://github.com/RPi-Distro/firmware-nonfree/raw/master/brcm80211/brcm
 
-set -x
 # Get firmware
 if [ ! -d "firmware" ] ; then
     mkdir -p firmware/boot
@@ -26,7 +25,7 @@ if [ ! -d "firmware" ] ; then
     wget -q -O "firmware/boot/start_x.elf" "${BOOT_FIRMWARE_URL}/start_x.elf"
 fi
 
-echo -e "\n### Settings \n"
+echo -e "\n\n### Settings \n"
 
 # Build directories
 BASEDIR="$(pwd)/images"
@@ -107,7 +106,7 @@ KERNEL_CONFIG=${KERNEL_CONFIG:="netfilter.config"}
 KERNELSRC_DIR=${KERNELSRC_DIR:=""}
 UBOOTSRC_DIR=${UBOOTSRC_DIR:=""}
 
-set +v
+set +x
 
 # Packages required in the chroot build environment.  If there is an error in your packages it will not build.
 APT_INCLUDES=${APT_INCLUDES:=""}
@@ -159,6 +158,8 @@ validation_check(){
   # Don't clobber an old build
   elif [ -e "$BUILDDIR" ] ; then
     echo "Error: Directory ${BUILDDIR} already exists, not proceeding."
+  elif [ ! -e "linux-4.9.30/arch/${KERNEL_ARCH}/boot/${KERNEL_IMAGE_SOURCE}" ] ; then
+    echo "Error: Linux kernel must be precompiled."
   else
     validation_result=true
   fi
@@ -205,7 +206,7 @@ if [ -n "$MISSING_PACKAGES" ] ; then
   fi
 fi
 
-set -v
+set -x
 
 # Call "cleanup" function on various signals and errors
 trap cleanup 0 1 2 3 6
