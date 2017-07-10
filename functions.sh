@@ -29,7 +29,7 @@ cleanup (){
 
 chroot_exec() {
   # Exec command in chroot
-  LANG=C LC_ALL=C DEBIAN_FRONTEND=noninteractive chroot ${R} $*
+  LANG=${USER_LOCALE} LC_ALL=${USER_LOCALE} DEBIAN_FRONTEND=noninteractive chroot ${R} $*
 }
 
 install_readonly() {
