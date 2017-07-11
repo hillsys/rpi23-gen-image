@@ -150,8 +150,8 @@ validation_check(){
     echo "Error: './files' required directory not found!"
   # Don't clobber an old build
   elif [ -e "$BUILDDIR" ] ; then
-    while read -p "Build directory found, do you wish to overwrite? [y/n]  " -n 1 OVERWRITE_BUILD
-      case $RPI_MODEL
+    while read -p "Build directory found, do you wish to overwrite? [y/n]  " -n 1 OVERWRITE_BUILD ; do
+      case $RPI_MODEL in
           y)
               echo -e "\n### Removing build directory.\n"
               rm -r images
