@@ -110,8 +110,9 @@ For a RPi3, you also need:
 ### Download the scripts
 
 To start the process of building a pure Debian 9 system for your Raspberry, download the scripts.
+
     cd [location you want to work from]
-    get clone https://github.com/hillsys/rpi23-gen-image
+    git clone https://github.com/hillsys/rpi23-gen-image
     cd rpi23-gen-image
 
 ### Kernel compilation
@@ -138,7 +139,7 @@ or
 
     sudo nano /etc/apt/sources.list
 
-From the rpi23-gen-image directory issue `./get-build-kernel.sh`.  If you are not root use sudo ./get-build-kernel.sh.
+From the rpi23-gen-image directory issue `./get-build-kernel.sh`.  If you are not root use `sudo ./get-build-kernel.sh`.
 Follow the prompts on the screen as the appear.  It will compile with all available processors (cores).
 If you wish to manually configure the kernel, visit https://github.com/michaelfranzl/rpi23-gen-image for more details.
 The supplied kernel configuration is known to work for Raspberry Pi 2 and allow iptables or nftables to work. 
