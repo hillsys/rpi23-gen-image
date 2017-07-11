@@ -1,7 +1,7 @@
 #!/bin/sh
 
 while read -p "Please select your Raspberry Pi model (2, 3 or q to quit):  " -n 1 RPI_MODEL ; do
-    case $RPI_MODEL
+    case $RPI_MODEL in
         2)
           DTB_FILE=bcm2836-rpi-2-b.dtb
           DEBIAN_RELEASE_ARCH=armhf

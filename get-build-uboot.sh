@@ -18,7 +18,7 @@ fi
 
 CPU_CORES=$(grep -c processor /proc/cpuinfo)
 while read -p "Please select your Raspberry Pi model (2, 3 or q to quit):  " -n 1 RPI_MODEL ; do
-    case $RPI_MODEL
+    case $RPI_MODEL in
         2)
             echo -e "\n### Compiling u-boot for Raspberry Pi 2.\n"
             make -j ${CPU_CORES} ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- rpi_2_defconfig all
