@@ -10,7 +10,6 @@ ENABLE_CONSOLE=false \
 ENABLE_DHCP=true \
 ENABLE_IPV6=false \
 ENABLE_SOUND=false \
-UBOOTSRC_DIR="/mnt/PI2-Build/u-boot" \
 NET_ADDRESS="" \
 NET_MASK="" \
 NET_GATEWAY="" \

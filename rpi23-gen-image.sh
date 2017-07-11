@@ -1,6 +1,6 @@
 #!/bin/sh
 
-while read -p "Please select your Raspberry Pi model (2, 3 or q to quit):  " -n 1 RPI_MODEL && [[ $RPI_MODEL != q ]]
+while read -p "Please select your Raspberry Pi model (2, 3 or q to quit):  " -n 1 RPI_MODEL
     case $RPI_MODEL
         2)
           DTB_FILE=bcm2836-rpi-2-b.dtb
@@ -11,6 +11,7 @@ while read -p "Please select your Raspberry Pi model (2, 3 or q to quit):  " -n 
           KERNEL_IMAGE_TARGET=linuz.img
           QEMU_BINARY=/usr/bin/qemu-arm-static
           UBOOT_CONFIG=rpi_2_defconfig
+          break;;
         3)
           DTB_FILE=broadcom/bcm2837-rpi-3-b.dtb
           DEBIAN_RELEASE_ARCH=arm64
@@ -20,7 +21,8 @@ while read -p "Please select your Raspberry Pi model (2, 3 or q to quit):  " -n 
           KERNEL_IMAGE_TARGET=linux.uImage
           QEMU_BINARY=/usr/bin/qemu-aarch64-static
           UBOOT_CONFIG=rpi_3_defconfig
-        q) exit 0
+          break;;
+        q) exit 0;;
         *) echo "Please select 2, 3 or q to quit.";;
     esac
 done
@@ -50,7 +52,7 @@ if [ ! -d "firmware" ] ; then
     wget -q -O "firmware/boot/start_x.elf" "${BOOT_FIRMWARE_URL}/start_x.elf"
 fi
 
-echo -e "\n\n### Settings \n"
+echo -e "\n\n### Static Settings \n"
 
 # Build directories
 BASEDIR="$(pwd)/images"
@@ -64,9 +66,13 @@ BOOT_DIR="${R}/boot/firmware"
 KERNEL_DIR="${R}/usr/src/linux"
 WLAN_FIRMWARE_DIR="${R}/lib/firmware/brcm"
 
-# Raspberry Pi model configuration
+# Debian & U-Boot Settings
 DEBIAN_RELEASE="stretch"
 KERNEL_FLAVOR="vanilla"
+KERNELSRC_DIR=${KERNELSRC_DIR:="linux-4.9.30"}
+UBOOTSRC_DIR=${UBOOTSRC_DIR:="u-boot"}
+
+echo -e "\n\n### User Defined Settings.  See en-us.sh for example. \n"
 
 # General settings
 HOSTNAME=${HOSTNAME:=rpi${RPI_MODEL}-${DEBIAN_RELEASE}}
@@ -96,10 +102,6 @@ ENABLE_NONFREE=${ENABLE_NONFREE:=false}
 
 # Feature settings
 ENABLE_SOUND=${ENABLE_SOUND:=false}
-
-# Kernel installation settings
-KERNELSRC_DIR=${KERNELSRC_DIR:="linux-4.9.30"}
-UBOOTSRC_DIR=${UBOOTSRC_DIR:=""}
 
 set +x
 
@@ -139,6 +141,8 @@ validation_check(){
   # Is functions script available
   elif [ ! -r "./functions.sh" ] ; then
     echo "Error: './functions.sh' required script not found!"
+  elif [ ! -d "./pmg" ] ; then
+    echo "Error: './pmg' required directory not found!"
   # Is u-boot ready?
   elif [ ! -e "${UBOOTSRC_DIR}/u-boot.bin" ] ; then
     echo "Error: U-Boot bootloader must be precompiled."
@@ -149,8 +153,17 @@ validation_check(){
     echo "Error: './files' required directory not found!"
   # Don't clobber an old build
   elif [ -e "$BUILDDIR" ] ; then
-    echo "Error: Directory ${BUILDDIR} already exists, not proceeding."
-  elif [ ! -e "linux-4.9.30/arch/${KERNEL_ARCH}/boot/${KERNEL_IMAGE_SOURCE}" ] ; then
+    while read -p "Build directory found, do you wish to overwrite? [y/n]  " -n 1 OVERWRITE_BUILD
+      case $RPI_MODEL
+          y)
+              echo -e "\n### Removing build directory.\n"
+              rm -r images
+              break;;
+          n) exit 0;;
+          *) echo "Please select y/n.";;
+      esac
+    done
+  elif [ ! -e "${KERNELSRC_DIR}/arch/${KERNEL_ARCH}/boot/${KERNEL_IMAGE_SOURCE}" ] ; then
     echo "Error: Linux kernel must be precompiled."
   else
     validation_result=true
