@@ -1,32 +1,5 @@
 #!/bin/sh
 
-while read -p "Please select your Raspberry Pi model (2, 3 or q to quit):  " -n 1 RPI_MODEL ; do
-    case $RPI_MODEL in
-        2)
-          DTB_FILE=bcm2836-rpi-2-b.dtb
-          DEBIAN_RELEASE_ARCH=armhf
-          KERNEL_ARCH=arm
-          CROSS_COMPILE=arm-linux-gnueabihf-
-          KERNEL_IMAGE_SOURCE=zImage
-          KERNEL_IMAGE_TARGET=linuz.img
-          QEMU_BINARY=/usr/bin/qemu-arm-static
-          UBOOT_CONFIG=rpi_2_defconfig
-          break;;
-        3)
-          DTB_FILE=broadcom/bcm2837-rpi-3-b.dtb
-          DEBIAN_RELEASE_ARCH=arm64
-          KERNEL_ARCH=arm64
-          CROSS_COMPILE=aarch64-linux-gnu-
-          KERNEL_IMAGE_SOURCE=Image.gz
-          KERNEL_IMAGE_TARGET=linux.uImage
-          QEMU_BINARY=/usr/bin/qemu-aarch64-static
-          UBOOT_CONFIG=rpi_3_defconfig
-          break;;
-        q) exit 0;;
-        *) echo "Please select 2, 3 or q to quit.";;
-    esac
-done
-
 echo -e "\n\n### Getting Firmware \n"
 set -x
 # URLs
@@ -78,6 +51,7 @@ echo -e "\n\n### User Defined Settings.  See en-us.sh for example. \n"
 HOSTNAME=${HOSTNAME:=rpi${RPI_MODEL}-${DEBIAN_RELEASE}}
 USER_NAME=${USER_NAME:=""}
 USER_LOCALE=${USER_LOCALE:="en_US.UTF-8"}
+RPI_MODEL=${RPI_MODEL:=2}
 
 # Network settings
 ENABLE_CONSOLE=${ENABLE_CONSOLE:=true}
@@ -104,6 +78,29 @@ ENABLE_NONFREE=${ENABLE_NONFREE:=false}
 ENABLE_SOUND=${ENABLE_SOUND:=false}
 
 set +x
+
+if [ ${RPI_MODEL} = 2 ] ; then
+          DTB_FILE=bcm2836-rpi-2-b.dtb
+          DEBIAN_RELEASE_ARCH=armhf
+          KERNEL_ARCH=arm
+          CROSS_COMPILE=arm-linux-gnueabihf-
+          KERNEL_IMAGE_SOURCE=zImage
+          KERNEL_IMAGE_TARGET=linuz.img
+          QEMU_BINARY=/usr/bin/qemu-arm-static
+          UBOOT_CONFIG=rpi_2_defconfig
+elif [ ${RPI_MODEL} = 3 ] ; then
+          DTB_FILE=broadcom/bcm2837-rpi-3-b.dtb
+          DEBIAN_RELEASE_ARCH=arm64
+          KERNEL_ARCH=arm64
+          CROSS_COMPILE=aarch64-linux-gnu-
+          KERNEL_IMAGE_SOURCE=Image.gz
+          KERNEL_IMAGE_TARGET=linux.uImage
+          QEMU_BINARY=/usr/bin/qemu-aarch64-static
+          UBOOT_CONFIG=rpi_3_defconfig
+else
+  echo "Error:  Incorrect Raspberry Pi model chosen.  Please correct your script and select 2 or 3 for RPI_MODEL."
+  exit 1
+fi
 
 # Packages required in the chroot build environment.  If there is an error in your packages it will not build.
 APT_INCLUDES=${APT_INCLUDES:=""}
