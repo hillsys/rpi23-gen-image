@@ -25,7 +25,7 @@ original notes https://github.com/michaelfranzl/rpi23-gen-image.  This is still 
     > Removed variables that were not in use.
     > Moved most IF statements into a function.
     > Downloads firmware for boot and wireless LAN.
-    > APT includes are similar to a base + system utility build for Debian 9.
+    > APT includes are similar to a base + system utility + ssh build for Debian 9.
     > Removed all reduce size functionality.
     > Removed additional variables based on new scripts to download and compile kernel and u-boot.
     > chroot_exec function has been placed into interactive mode.
@@ -83,7 +83,7 @@ Do the following steps as root user or utilizing sudo.
     
 ### Optional:  Set up caching for apt
 
-This way, you won't have to re-download hundreds of megabytes of Debian packages from the Debian server every time you run the `rpi23-gen-image` script.
+This way, you won't have to re-download hundreds of megabytes of Debian packages from the Debian server every time you run the rpi23-gen-image.sh script.
 
     apt install apt-cacher-ng
 
@@ -131,9 +131,11 @@ Make sure you have deb-src listed for the particular mirror you are using.
 
 To edit or view your sources.list:
 
-    As root:
+As root:
+
     nano /etc/apt/sources.list
-    or
+or
+
     sudo nano /etc/apt/sources.list
 
 From the rpi23-gen-image directory issue `./get-build-kernel.sh`.  If you are not root use sudo ./get-build-kernel.sh.
@@ -148,10 +150,64 @@ Follow the prompts on the screen as the appear.  It will compile with all availa
    
 ### Create your own build script.
 
-Before you can begin building your image for the Raspberry, you will want to at least look over the settings file, especially if your default
+Before you can begin building your image for the Raspberry, you will want to at least look over the settings file, especially if your default language is not english.
 
+*en-us.sh*
+    RPI_MODEL=2 \ # Only model 2 and 3 are supported here.  Any other value and script will exit
+    APT_SERVER="mirrors.kernel.org" \ # Supply the mirror you wish to use here.  The image will copy your current sources.list to use for Raspberry.
+    APT_PROXY="localhost:3142" \  # Leave empty or delete entire line if you do not want to use 
+    APT_INCLUDES="iamerican,ibritish,ienglish-common,task-english,wamerican" \ # use appropriate substitutions for your locale.
+    HOSTNAME="pi2-stretch" \  # Name you want your Rasberry to have
+    USER_NAME="administrator" \ # User name you will use to login into the Raspberry.  Root is disabled for this image.
+    USER_LOCALE="en_US.UTF-8" \ # The locale you are in
+    ENABLE_CONSOLE=false \ # Enables serial console
+    ENABLE_DHCP=true \  # Enables DHCP on boot
+    ENABLE_IPV6=false \ # Enables the IPv6 protocols
+    ENABLE_SOUND=false \ # Enables sound
+    NET_ADDRESS="" \ # If set, ensure DHCP is false.  IP address to assign to Raspberry.
+    NET_MASK="" \ # If set, ensure DHCP is false.  Mask of address to assign to Raspberry.
+    NET_GATEWAY="" \  # If set, ensure DHCP is false.  IP address of your router.
+    NET_DNS_1="" \ # If set, ensure DHCP is false.  First DNS server to use.
+    NET_DNS_2="" \ # If set, ensure DHCP is false.  Second DNS server to use.
+    NET_NTP_1="0.us.pool.ntp.org" \ # Public time server to use.  See http://www.pool.ntp.org/
+    NET_NTP_2="1.us.pool.ntp.org" \ # Public time server to use.  See http://www.pool.ntp.org/
+    ./rpi23-gen-image.sh
 
-    
+You can copy the current en-us.sh file to create one specific for you location.  For example, Russian is shown below.
+
+    cp en-us.sh ru_RU.sh
+
+    nano ru_RU.sh
+
+    RPI_MODEL=2 \ 
+    APT_SERVER="mirrors.kernel.org" \ 
+    APT_PROXY="localhost:3142" \ 
+    APT_INCLUDES="task-russian" \ 
+    HOSTNAME="pi2-stretch" \  
+    USER_NAME="administrator" \ 
+    USER_LOCALE="ru_RU.UTF-8" \ 
+    ENABLE_CONSOLE=false \ 
+    ENABLE_DHCP=true \  
+    ENABLE_IPV6=false \ 
+    ENABLE_SOUND=false \ 
+    NET_ADDRESS="" \ 
+    NET_MASK="" \ 
+    NET_GATEWAY="" \  
+    NET_DNS_1="" \ 
+    NET_DNS_2="" \ 
+    NET_NTP_1="ru.pool.ntp.org" \ # Public time server to use.  See http://www.pool.ntp.org/
+    NET_NTP_2="rs.pool.ntp.org " \ # Public time server to use.  See http://www.pool.ntp.org/
+    ./rpi23-gen-image.sh
+
+You can do web searches to find specifics on what you will need to install.  https://docs.moodle.org/dev/Table_of_locales is a good starting point
+to find your locale code.  Remember what locale code you use, because you will be asked to select that code during the creation of the image.
+
+After you have configured your new script, execute the script `./scriptname.sh` where *scriptname* is the name of the script.  If you want to run the en-us script
+just type `./en-us.sh` or if you are note root, `sudo ./en-us.sh`.  
+
+After the script starts, it will take some time to build the new image for the Raspberry.  Check on it every so often as towards the end of the process it will
+prompt you for the locale you want to use and for a password to log into the account.
+
 ### Install the system on a SD card
 
 Insert a SD card into the card reader of your host PC. You'll need two partitions on it. I'll leave as an exercise for the reader the creation of a  partition table according to the following output of `fdisk` for a 32GB card:
