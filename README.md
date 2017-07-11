@@ -135,7 +135,7 @@ To edit or view your sources.list:
     nano /etc/apt/sources.list
     or
     sudo nano /etc/apt/sources.list
-    
+
 From the rpi23-gen-image directory issue `./get-build-kernel.sh`.  If you are not root use sudo ./get-build-kernel.sh.
 Follow the prompts on the screen as the appear.  It will compile with all available processors (cores).
 If you wish to manually configure the kernel, visit https://github.com/michaelfranzl/rpi23-gen-image for more details.
@@ -146,7 +146,9 @@ The supplied kernel configuration is known to work for Raspberry Pi 2 and allow 
 From the rpi23-gen-image directory issue `./get-build-uboot.sh`.  If you are not root use `sudo ./get-build-kernel.sh`.
 Follow the prompts on the screen as the appear.  It will compile with all available processors (cores).  
    
-### Build the system!
+### Create your own build script.
+
+Before you can begin building your image for the Raspberry, you will want to at least look over the settings file, especially if your default
 
 
     

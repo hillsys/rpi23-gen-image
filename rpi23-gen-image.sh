@@ -69,8 +69,8 @@ WLAN_FIRMWARE_DIR="${R}/lib/firmware/brcm"
 # Debian & U-Boot Settings
 DEBIAN_RELEASE="stretch"
 KERNEL_FLAVOR="vanilla"
-KERNELSRC_DIR=${KERNELSRC_DIR:="linux-4.9.30"}
-UBOOTSRC_DIR=${UBOOTSRC_DIR:="u-boot"}
+KERNELSRC_DIR="linux-4.9.30"
+UBOOTSRC_DIR="u-boot"
 
 echo -e "\n\n### User Defined Settings.  See en-us.sh for example. \n"
 
@@ -161,7 +161,7 @@ validation_check(){
       esac
     done
   elif [ ! -e "${KERNELSRC_DIR}/arch/${KERNEL_ARCH}/boot/${KERNEL_IMAGE_SOURCE}" ] ; then
-    echo "Error: Linux kernel must be precompiled."
+    echo "Error: ${KERNELSRC_DIR}/arch/${KERNEL_ARCH}/boot/${KERNEL_IMAGE_SOURCE} not found.  Linux kernel must be precompiled."
   else
     validation_result=true
   fi
@@ -180,7 +180,7 @@ mkdir -p "${R}"
 
 # Check if build directory has enough of free disk space >512MB
 if [ "$(df --output=avail ${BUILDDIR} | sed "1d")" -le "524288" ] ; then
-  echo "error: ${BUILDDIR} not enough space left to generate the output image!"
+  echo "Error: ${BUILDDIR} not enough space left to generate the output image!"
   exit 1
 fi
 
