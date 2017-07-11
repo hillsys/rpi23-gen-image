@@ -1,6 +1,5 @@
 #!/bin/bash
 
-RPI_MODEL=2 \
 APT_SERVER="mirrors.kernel.org" \
 APT_PROXY="localhost:3142" \
 APT_INCLUDES="iamerican,ibritish,ienglish-common,task-english,wamerican" \
