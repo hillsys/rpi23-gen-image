@@ -1,6 +1,6 @@
 #!/bin/sh
 
-while read -p "Please select your Raspberry Pi model (2, 3 or q to quit):  " -n 1 RPI_MODEL
+while read -p "Please select your Raspberry Pi model (2, 3 or q to quit):  " -n 1 RPI_MODEL ; do
     case $RPI_MODEL
         2)
           DTB_FILE=bcm2836-rpi-2-b.dtb
@@ -107,7 +107,7 @@ set +x
 
 # Packages required in the chroot build environment.  If there is an error in your packages it will not build.
 APT_INCLUDES=${APT_INCLUDES:=""}
-APT_INCLUDES="${APT_INCLUDES},adduser,apt,apt-listchanges,apt-utils,,base-files,bash-completion,bc,bind9-host,binfmt-support,binutils,bison,bmap-tools"
+APT_INCLUDES="${APT_INCLUDES},adduser,apt,apt-listchanges,apt-utils,autoconf,base-files,bash-completion,bc,bind9-host,binfmt-support,binutils,bison,bmap-tools"
 APT_INCLUDES="${APT_INCLUDES},bsdmainutils,build-essential,bzip2,ca-certificates,console-setup,console-setup-linux,cpio,cpp,cpp-6,cron,dbus,debconf-i18n"
 APT_INCLUDES="${APT_INCLUDES},debian-archive-keyring,debian-faq,device-tree-compiler,dh-python,dictionaries-common,discover,discover-data,distro-info-data"
 APT_INCLUDES="${APT_INCLUDES},dmidecode,dmsetup,doc-debian,dosfstools,dpkg-cross,dpkg-dev,efibootmgr,eject,emacsen-common,exim4,exim4-base,exim4-config"
@@ -122,10 +122,7 @@ APT_INCLUDES="${APT_INCLUDES},python3,python3-apt,python3-chardet,python3-debian
 APT_INCLUDES="${APT_INCLUDES},python3-pycurl,python3-pysimplesoap,python3-reportbug,python3-requests,python3-six,python3-urllib3,python3.5,python3.5-minimal"
 APT_INCLUDES="${APT_INCLUDES},readline-common,rename,reportbug,rng-tools,rsync,rsyslog,sgml-base,sudo,systemd,systemd-sysv,task-ssh-server,tasksel,tasksel-data"
 APT_INCLUDES="${APT_INCLUDES},tcpd,telnet,traceroute,ucf,udev,util-linux-locales,vim-common,vim-tiny,wget,whiptail,whois,xauth,xkb-data,xml-core"
-APT_INCLUDES="${APT_INCLUDES},xxd,xz-utils"
-
-# nftables includes
-APT_INCLUDES="${APT_INCLUDES},autoconf,libmnl-dev,libnftnl-dev,libgmp-dev,libreadline-dev,nftables"
+APT_INCLUDES="${APT_INCLUDES},xxd,xz-utils,libgmp-dev,libreadline-dev"
 
 # Packages required for bootstrapping  (host PC)
 REQUIRED_PACKAGES="debootstrap debian-archive-keyring qemu-user-static binfmt-support dosfstools rsync bmap-tools whois git"

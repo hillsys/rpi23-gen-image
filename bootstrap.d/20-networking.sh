@@ -39,10 +39,6 @@ install_readonly files/interfaces "${ETC_DIR}/network/interfaces"
 # Enable systemd-networkd service
 chroot_exec systemctl enable systemd-networkd
 
-# Remove iptables and enable nftables
-chroot_exec apt remove iptables
-chroot_exec systemctl enable nftables
-
 # Install host.conf resolver configuration
 printf "# spoof warn\nmulti on" > files/host.conf
 install_readonly files/host.conf "${ETC_DIR}/host.conf"

@@ -14,10 +14,12 @@ echo -e "\n### Clean image.\n"
 make mrproper
 
 echo -e "\n### Copy config file.\n"
-cp "files/kernel.config" linux-4.9.30/.config
+cd ..
+cp files/kernel.config linux-4.9.30/.config
 CPU_CORES=$(grep -c processor /proc/cpuinfo)
+cd linux-4.9.30
 
-while read -p "Please select your Raspberry Pi model (2, 3 or q to quit):  " -n 1 RPI_MODEL
+while read -p "Please select your Raspberry Pi model (2, 3 or q to quit):  " -n 1 RPI_MODEL ; do
     case $RPI_MODEL
         2)
             echo -e "\n### Compiling for Raspberry Pi 2.\n"
