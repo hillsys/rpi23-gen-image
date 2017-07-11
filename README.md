@@ -154,6 +154,7 @@ Follow the prompts on the screen as the appear.  It will compile with all availa
 Before you can begin building your image for the Raspberry, you will want to at least look over the settings file, especially if your default language is not english.
 
 *en-us.sh*
+
     RPI_MODEL=2 \ # Only model 2 and 3 are supported here.  Any other value and script will exit
     APT_SERVER="mirrors.kernel.org" \ # Supply the mirror you wish to use here.  The image will copy your current sources.list to use for Raspberry.
     APT_PROXY="localhost:3142" \  # Leave empty or delete entire line if you do not want to use 
