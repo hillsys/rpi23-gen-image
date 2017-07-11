@@ -48,7 +48,7 @@ printf "# spoof warn\nmulti on" > files/host.conf
 install_readonly files/host.conf "${ETC_DIR}/host.conf"
 
 # Install wireless binaries required to use the RPi3 wireless interface
-if [ "$ENABLE_WIRELESS" = true ] ; then
+if [ "$RPI_MODEL" = 3 ] ; then
   if [ ! -d ${WLAN_FIRMWARE_DIR} ] ; then
     mkdir -p ${WLAN_FIRMWARE_DIR}
   fi

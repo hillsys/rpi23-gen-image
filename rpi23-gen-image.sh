@@ -96,7 +96,6 @@ APT_SERVER=${APT_SERVER:=""}
 ENABLE_NONFREE=${ENABLE_NONFREE:=false}
 
 # Feature settings
-ENABLE_WIRELESS=${ENABLE_WIRELESS:=false}
 ENABLE_SOUND=${ENABLE_SOUND:=false}
 
 # Kernel installation settings
@@ -141,9 +140,6 @@ validation_check(){
   # Is functions script available
   elif [ ! -r "./functions.sh" ] ; then
     echo "Error: './functions.sh' required script not found!"
-  # Check if the internal wireless interface is supported by the RPi model
-  elif [ "$ENABLE_WIRELESS" = true ] && [ "$RPI_MODEL" != 3 ] ; then
-    echo "Error: The selected Raspberry Pi model has no internal wireless interface!"
   # Is u-boot ready?
   elif [ ! -e "${UBOOTSRC_DIR}/u-boot.bin" ] ; then
     echo "Error: U-Boot bootloader must be precompiled."
