@@ -1,30 +1,29 @@
 #!/bin/sh
 
-read -p "Please select your Raspberry Pi model (2 or 3) followed by [ENTER]:  " -n 1 RPI_MODEL
-
-# Set Raspberry Pi model specific configuration
-if [ "$RPI_MODEL" = 2 ] ; then
-  DTB_FILE=bcm2836-rpi-2-b.dtb
-  DEBIAN_RELEASE_ARCH=armhf
-  KERNEL_ARCH=arm
-  CROSS_COMPILE=arm-linux-gnueabihf-
-  KERNEL_IMAGE_SOURCE=zImage
-  KERNEL_IMAGE_TARGET=linuz.img
-  QEMU_BINARY=/usr/bin/qemu-arm-static
-  UBOOT_CONFIG=rpi_2_defconfig
-elif [ "$RPI_MODEL" = 3 ] ; then
-  DTB_FILE=broadcom/bcm2837-rpi-3-b.dtb
-  DEBIAN_RELEASE_ARCH=arm64
-  KERNEL_ARCH=arm64
-  CROSS_COMPILE=aarch64-linux-gnu-
-  KERNEL_IMAGE_SOURCE=Image.gz
-  KERNEL_IMAGE_TARGET=linux.uImage
-  QEMU_BINARY=/usr/bin/qemu-aarch64-static
-  UBOOT_CONFIG=rpi_3_defconfig
-else
-  echo -e "\nAn incorrect model was chosen.  Rerun script and select an apporiate model."
-  exit 1
-fi
+while read -p "Please select your Raspberry Pi model (2, 3 or q to quit):  " -n 1 RPI_MODEL && [[ $RPI_MODEL != q ]]
+    case $RPI_MODEL
+        2)
+          DTB_FILE=bcm2836-rpi-2-b.dtb
+          DEBIAN_RELEASE_ARCH=armhf
+          KERNEL_ARCH=arm
+          CROSS_COMPILE=arm-linux-gnueabihf-
+          KERNEL_IMAGE_SOURCE=zImage
+          KERNEL_IMAGE_TARGET=linuz.img
+          QEMU_BINARY=/usr/bin/qemu-arm-static
+          UBOOT_CONFIG=rpi_2_defconfig
+        3)
+          DTB_FILE=broadcom/bcm2837-rpi-3-b.dtb
+          DEBIAN_RELEASE_ARCH=arm64
+          KERNEL_ARCH=arm64
+          CROSS_COMPILE=aarch64-linux-gnu-
+          KERNEL_IMAGE_SOURCE=Image.gz
+          KERNEL_IMAGE_TARGET=linux.uImage
+          QEMU_BINARY=/usr/bin/qemu-aarch64-static
+          UBOOT_CONFIG=rpi_3_defconfig
+        q) exit 0
+        *) echo "Please select 2, 3 or q to quit.";;
+    esac
+done
 
 echo -e "\n\n### Getting Firmware \n"
 set -x
