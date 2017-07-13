@@ -91,7 +91,7 @@ Check its status page:
 
     http://localhost:3142
     
-*Note:  This is not needed, but it is highly recommended.  I have removed the hardcode of the apt-catcher from the script files.*
+*Note:  This is not needed, but it is highly recommended.  I have removed the hard code of the apt-catcher from the script files.*
 
 ### Install dependencies
 
@@ -154,24 +154,25 @@ Follow the prompts on the screen as the appear.  It will compile with all availa
 Before you can begin building your image for the Raspberry, you will want to at least look over the settings file, especially if your default language is not english.
 
 *en-us.sh*
-    RPI_MODEL=2 \ # Only model 2 and 3 are supported here.  Any other value and script will exit
-    APT_SERVER="mirrors.kernel.org" \ # Supply the mirror you wish to use here.  The image will copy your current sources.list to use for Raspberry.
-    APT_PROXY="localhost:3142" \  # Leave empty or delete entire line if you do not want to use 
-    APT_INCLUDES="iamerican,ibritish,ienglish-common,task-english,wamerican" \ # use appropriate substitutions for your locale.
-    HOSTNAME="pi2-stretch" \  # Name you want your Rasberry to have
-    USER_NAME="administrator" \ # User name you will use to login into the Raspberry.  Root is disabled for this image.
-    USER_LOCALE="en_US.UTF-8" \ # The locale you are in
-    ENABLE_CONSOLE=false \ # Enables serial console
-    ENABLE_DHCP=true \  # Enables DHCP on boot
-    ENABLE_IPV6=false \ # Enables the IPv6 protocols
-    ENABLE_SOUND=false \ # Enables sound
-    NET_ADDRESS="" \ # If set, ensure DHCP is false.  IP address to assign to Raspberry.
-    NET_MASK="" \ # If set, ensure DHCP is false.  Mask of address to assign to Raspberry.
-    NET_GATEWAY="" \  # If set, ensure DHCP is false.  IP address of your router.
-    NET_DNS_1="" \ # If set, ensure DHCP is false.  First DNS server to use.
-    NET_DNS_2="" \ # If set, ensure DHCP is false.  Second DNS server to use.
-    NET_NTP_1="0.us.pool.ntp.org" \ # Public time server to use.  See http://www.pool.ntp.org/
-    NET_NTP_2="1.us.pool.ntp.org" \ # Public time server to use.  See http://www.pool.ntp.org/
+
+    RPI_MODEL=2 \ 
+    APT_SERVER="mirrors.kernel.org" \
+    APT_PROXY="localhost:3142" \  
+    APT_INCLUDES="iamerican,ibritish,ienglish-common,task-english,wamerican" \
+    HOSTNAME="pi2-stretch" \  
+    USER_NAME="administrator" \ 
+    USER_LOCALE="en_US.UTF-8" \
+    ENABLE_CONSOLE=false \
+    ENABLE_DHCP=true \  
+    ENABLE_IPV6=false \ 
+    ENABLE_SOUND=false \ 
+    NET_ADDRESS="" \
+    NET_MASK="" \ 
+    NET_GATEWAY="" \  
+    NET_DNS_1="" \
+    NET_DNS_2="" \ 
+    NET_NTP_1="0.us.pool.ntp.org" \ 
+    NET_NTP_2="1.us.pool.ntp.org" \ 
     ./rpi23-gen-image.sh
 
 You can copy the current en-us.sh file to create one specific for you location.  For example, Russian is shown below.
@@ -196,8 +197,8 @@ You can copy the current en-us.sh file to create one specific for you location. 
     NET_GATEWAY="" \  
     NET_DNS_1="" \ 
     NET_DNS_2="" \ 
-    NET_NTP_1="ru.pool.ntp.org" \ # Public time server to use.  See http://www.pool.ntp.org/
-    NET_NTP_2="rs.pool.ntp.org " \ # Public time server to use.  See http://www.pool.ntp.org/
+    NET_NTP_1="ru.pool.ntp.org" \ 
+    NET_NTP_2="rs.pool.ntp.org " \ 
     ./rpi23-gen-image.sh
 
 You can do web searches to find specifics on what you will need to install.  https://docs.moodle.org/dev/Table_of_locales is a good starting point
