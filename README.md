@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # rpi23-gen-image
 
 ## Introduction
@@ -206,7 +205,7 @@ You can do web searches to find specifics on what you will need to install.  htt
 to find your locale code.  Remember what locale code you use, because you will be asked to select that code during the creation of the image.
 
 After you have configured your new script, execute the script `./scriptname.sh` where *scriptname* is the name of the script.  If you want to run the en-us script
-just type `./en-us.sh` or if you are note root, `sudo ./en-us.sh`.  
+just type `./en-us.sh` or if you are not root, `sudo ./en-us.sh`.  
 
 After the script starts, it will take some time to build the new image for the Raspberry.  Check on it every so often as towards the end of the process it will
 prompt you for the locale you want to use and for a password to log into the account.
