@@ -210,6 +210,8 @@ just type `./en-us.sh` or if you are not root, `sudo ./en-us.sh`.
 After the script starts, it will take some time to build the new image for the Raspberry.  Check on it every so often as towards the end of the process it will
 prompt you for the locale you want to use and for a password to log into the account.
 
+*Note:  The following information is the same as provided by Michael Franzl https://github.com/michaelfranzl/rpi23-gen-image*
+
 ### Install the system on a SD card
 
 Insert a SD card into the card reader of your host PC. You'll need two partitions on it. I'll leave as an exercise for the reader the creation of a  partition table according to the following output of `fdisk` for a 32GB card:
